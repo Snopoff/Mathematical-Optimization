@@ -1,6 +1,7 @@
 from typing import Callable
 from math import sqrt
 import numpy as np
+import autograd as ad
 
 
 def bisection(f: Callable, a=0.0, b=1.0, eps=0.001) -> float:
@@ -93,14 +94,13 @@ def Simpson(f: Callable, a=0.0, b=1.0, n=100) -> float:
     return result
 
 
-def Newton(f: Callable, df: Callable, x0=1.0, eps=1e-8, max_iter=1e6) -> float:
+def Newton(f: Callable, x0=1.0, eps=1e-8, max_iter=1e6) -> float:
     '''
     Newton's method
 
         Parameters
         ----------
         f : given function
-        df : derivative of a function
         x0 : initial guess for a solution f(x)=0
         eps : accuracy
         max_inter : maximum number of iterations
@@ -110,6 +110,8 @@ def Newton(f: Callable, df: Callable, x0=1.0, eps=1e-8, max_iter=1e6) -> float:
         float : approximation for the root of the function
 
     '''
+
+    df = ad.grad(f)
 
     result = x0
     for n in range(int(max_iter)):
@@ -131,11 +133,6 @@ if __name__ == "__main__":
         c = -3
         return a*x**2 + b*x + c
 
-    def df(x):
-        a = 5
-        b = 1
-        c = -3
-        return 2*a*x + b
     a = 0.0
     b = 4.0
     print(bisection(f, a, b))
